@@ -43,18 +43,35 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
+    // Função para atualizar as ligas disponíveis com base no fornecedor selecionado
+    function updateAlloys() {
+        const supplier = supplierSelect.value;
+        alloySelect.innerHTML = '<option value="">Selecione a liga</option>';
+        alloySelect.disabled = !supplier;
+        
+        if (supplier && productData[supplier]) {
+            Object.keys(productData[supplier]).forEach(alloy => {
+                const option = document.createElement('option');
+                option.value = alloy;
+                option.textContent = alloy;
+                alloySelect.appendChild(option);
+            });
+        }
+        
+        // Limpar e desabilitar a descrição do produto quando mudar o fornecedor
+        productDescriptionSelect.innerHTML = '<option value="">Selecione a descrição</option>';
+        productDescriptionSelect.disabled = true;
+    }
+
     // Função para atualizar as descrições de produtos
     function updateProductDescriptions() {
         const supplier = supplierSelect.value;
         const alloy = alloySelect.value;
         
-        console.log('Atualizando descrições:', { supplier, alloy });
-        console.log('productData disponível:', productData);
-        
         productDescriptionSelect.innerHTML = '<option value="">Selecione a descrição</option>';
+        productDescriptionSelect.disabled = true;
         
         if (supplier && alloy && productData[supplier] && productData[supplier][alloy]) {
-            console.log('Dados encontrados:', productData[supplier][alloy]);
             productData[supplier][alloy].forEach(description => {
                 const option = document.createElement('option');
                 option.value = description;
@@ -62,24 +79,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 productDescriptionSelect.appendChild(option);
             });
             productDescriptionSelect.disabled = false;
-        } else {
-            console.log('Nenhum dado encontrado para esta combinação');
-            productDescriptionSelect.disabled = true;
+            
+            // Se houver apenas uma descrição, seleciona automaticamente
+            if (productData[supplier][alloy].length === 1) {
+                productDescriptionSelect.value = productData[supplier][alloy][0];
+            }
         }
     }
 
     // Event listeners para atualização das descrições de produtos
     supplierSelect.addEventListener('change', function() {
-        console.log('Fornecedor alterado:', supplierSelect.value);
+        updateAlloys();
         updateProductDescriptions();
     });
 
-    alloySelect.addEventListener('change', function() {
-        console.log('Liga alterada:', alloySelect.value);
-        updateProductDescriptions();
-    });
+    alloySelect.addEventListener('change', updateProductDescriptions);
 
-    // Inicializar as descrições de produtos
+    // Inicializar os selects
+    updateAlloys();
     updateProductDescriptions();
     
     // Elementos da tabela
@@ -505,7 +522,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (dayProducts.length > 0) {
                 dayEl.classList.add('has-products');
             }
-            if (selectedDate && date.toDateString() === selectedDate.toDateString()) {
+            if (selectedDate && 
+                date.getFullYear() === selectedDate.getFullYear() &&
+                date.getMonth() === selectedDate.getMonth() &&
+                date.getDate() === selectedDate.getDate()) {
                 dayEl.classList.add('selected');
             }
 
@@ -526,11 +546,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Adicionar a última semana
         calendarEl.appendChild(weekDiv);
+
+        // Se houver uma data selecionada, atualizar os detalhes do dia
+        if (selectedDate) {
+            updateDayDetails(selectedDate);
+        }
     }
 
     function updateDayDetails(date) {
         const dayProducts = getProductsForDate(date);
         const dayProductsEl = document.querySelector('.day-products');
+        const selectedDateSpan = document.querySelector('.selected-date');
+        
         const formattedDate = new Intl.DateTimeFormat('pt-BR', { 
             weekday: 'long', 
             year: 'numeric', 
@@ -538,7 +565,15 @@ document.addEventListener('DOMContentLoaded', function() {
             day: 'numeric' 
         }).format(date);
 
-        selectedDateSpan.textContent = formattedDate;
+        if (selectedDateSpan) {
+            selectedDateSpan.textContent = formattedDate;
+        }
+
+        if (!dayProductsEl) {
+            console.error('Elemento day-products não encontrado');
+            return;
+        }
+
         dayProductsEl.innerHTML = '';
 
         if (dayProducts.length === 0) {
@@ -585,7 +620,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function getProductsForDate(date) {
         return products.filter(product => {
             const productDate = new Date(product.deliveryDate);
-            return productDate.toDateString() === date.toDateString();
+            return (
+                productDate.getFullYear() === date.getFullYear() &&
+                productDate.getMonth() === date.getMonth() &&
+                productDate.getDate() === date.getDate()
+            );
         });
     }
 
@@ -632,14 +671,27 @@ document.addEventListener('DOMContentLoaded', function() {
     purchaseForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
+        // Verificar se todos os elementos necessários existem
+        const supplier = document.getElementById('supplier');
+        const alloy = document.getElementById('alloy');
+        const productDescription = document.getElementById('product_description');
+        const purchaseType = document.getElementById('purchase_type');
+        const quantidade = document.getElementById('quantidade');
+        const deliveryDate = document.getElementById('delivery_date');
+
+        if (!supplier || !alloy || !productDescription || !purchaseType || !quantidade || !deliveryDate) {
+            console.error('Elementos do formulário não encontrados');
+            return;
+        }
+
         const formData = {
             id: nextId++,
-            supplier: supplierSelect.value,
-            alloy: alloySelect.value,
-            productDescription: productDescriptionSelect.value,
-            purchaseType: document.getElementById('purchase_type').value,
-            quantity: parseFloat(document.getElementById('quantity').value),
-            deliveryDate: document.getElementById('delivery_date').value
+            supplier: supplier.value,
+            alloy: alloy.value,
+            productDescription: productDescription.value,
+            purchaseType: purchaseType.value,
+            quantity: parseFloat(quantidade.value),
+            deliveryDate: deliveryDate.value
         };
 
         products.push(formData);
@@ -651,16 +703,7 @@ document.addEventListener('DOMContentLoaded', function() {
         productDescriptionSelect.innerHTML = '<option value="">Selecione a descrição</option>';
         
         // Mostrar toast de sucesso
-        const toast = document.createElement('div');
-        toast.className = 'toast success';
-        toast.innerHTML = `
-            <div class="toast-content">
-                <i class="bi bi-check-circle"></i>
-                <span>Carga adicionada com sucesso!</span>
-            </div>
-        `;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+        showToast('Carga adicionada com sucesso!', 'success');
     });
 
     // Event listeners do calendário
@@ -725,9 +768,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicialização
     updateCalendar();
 
-    // Adicionar event listeners para os novos botões
-    document.getElementById('print-request').addEventListener('click', printRequest);
-    document.getElementById('email-request').addEventListener('click', emailRequest);
+    // Event listeners para os novos botões
+    const printRequestBtn = document.getElementById('print-request');
+    const emailRequestBtn = document.getElementById('email-request');
+    
+    if (printRequestBtn) {
+        printRequestBtn.addEventListener('click', printRequest);
+    }
+    
+    if (emailRequestBtn) {
+        emailRequestBtn.addEventListener('click', emailRequest);
+    }
 });
 
 // Função para formatar o mês e ano
@@ -750,17 +801,22 @@ function formatDate(date) {
 
 // Função para imprimir a solicitação
 function printRequest() {
-    const requestId = document.getElementById('request-id').textContent;
-    const requestDate = document.getElementById('request-date').textContent;
-    const requestStatus = document.getElementById('request-status').textContent;
+    const requestId = document.getElementById('request-id');
+    const requestDate = document.getElementById('request-date');
+    const requestStatus = document.getElementById('request-status');
     const itemsTable = document.getElementById('request-items-table');
+
+    if (!requestId || !requestDate || !requestStatus || !itemsTable) {
+        console.error('Elementos necessários para impressão não encontrados');
+        return;
+    }
 
     // Criar uma nova janela para impressão
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
         <html>
         <head>
-            <title>Solicitação de Compra #${requestId}</title>
+            <title>Solicitação de Compra #${requestId.textContent}</title>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -804,10 +860,10 @@ function printRequest() {
             </style>
         </head>
         <body>
-            <h1>Solicitação de Compra #${requestId}</h1>
+            <h1>Solicitação de Compra #${requestId.textContent}</h1>
             <div class="info">
-                <p><strong>Data:</strong> ${requestDate}</p>
-                <p><strong>Status:</strong> <span class="status status-${requestStatus.toLowerCase()}">${requestStatus}</span></p>
+                <p><strong>Data:</strong> ${requestDate.textContent}</p>
+                <p><strong>Status:</strong> <span class="status status-${requestStatus.textContent.toLowerCase()}">${requestStatus.textContent}</span></p>
             </div>
             ${itemsTable.outerHTML}
         </body>
@@ -822,16 +878,21 @@ function printRequest() {
 
 // Função para enviar a solicitação por e-mail
 function emailRequest() {
-    const requestId = document.getElementById('request-id').textContent;
-    const requestDate = document.getElementById('request-date').textContent;
-    const requestStatus = document.getElementById('request-status').textContent;
+    const requestId = document.getElementById('request-id');
+    const requestDate = document.getElementById('request-date');
+    const requestStatus = document.getElementById('request-status');
+    
+    if (!requestId || !requestDate || !requestStatus) {
+        console.error('Elementos necessários para envio de e-mail não encontrados');
+        return;
+    }
     
     // Criar o corpo do e-mail com os detalhes da solicitação
-    const subject = `Solicitação de Compra #${requestId}`;
+    const subject = `Solicitação de Compra #${requestId.textContent}`;
     const body = `Detalhes da Solicitação:\n\n` +
-                `ID: ${requestId}\n` +
-                `Data: ${requestDate}\n` +
-                `Status: ${requestStatus}\n\n` +
+                `ID: ${requestId.textContent}\n` +
+                `Data: ${requestDate.textContent}\n` +
+                `Status: ${requestStatus.textContent}\n\n` +
                 `Para mais detalhes, acesse o sistema.`;
     
     // Abrir o cliente de e-mail padrão

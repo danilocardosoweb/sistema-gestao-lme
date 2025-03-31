@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitação de Compras - LME</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <img src="https://i.im.ge/2023/06/20/iZU1G0.LogoPagina.png" alt="Logo da Empresa" class="company-logo">
+            <a href="index.html">Tabela de Preços</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="analysis.html">Análise</a>
+            <a href="purchase_request.html" class="active">Solicitação de Compras</a>
+            <a href="consumption_analysis.html">Análise de Consumo</a>
+        </nav>
+
+        <div class="content-header">
+            <h1>Solicitação de Compras</h1>
+            <p class="subtitle">Gestão de Pedidos</p>
+        </div>
+
+        <main>
+            <!-- Formulário de Solicitação -->
+            <section class="form-section">
+                <h2>Nova Solicitação de Compra</h2>
+                <form id="purchase-form" class="form-grid">
+                    <div class="form-group">
+                        <label for="client_name">Nome do Cliente</label>
+                        <input type="text" id="client_name" name="client_name" value="TECNOPERFIL ALUMINIO LTDA" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="supplier">Fornecedor</label>
+                        <select id="supplier" name="supplier" required>
+                            <option value="">Selecione o fornecedor</option>
+                            <option value="CBA">CBA</option>
+                            <option value="ALCOA">ALCOA</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="alloy">Liga</label>
+                        <select id="alloy" name="alloy" required>
+                            <option value="">Selecione a liga</option>
+                            <option value="6060">6060</option>
+                            <option value="6063">6063</option>
+                            <option value="6460">6460</option>
+                            <option value="6005">6005</option>
+                            <option value="6463">6463</option>
+                            <option value="6082">6082</option>
+                            <option value="6061">6061</option>
+                            <option value="6351">6351</option>
+                            <option value="6101">6101</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="product_description">Descrição do Produto</label>
+                        <select id="product_description" name="product_description" required>
+                            <option value="">Selecione a descrição</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="purchase_type">Tipo de Compra</label>
+                        <select id="purchase_type" name="purchase_type" required>
+                            <option value="">Selecione o tipo</option>
+                            <option value="Vendas">Vendas</option>
+                            <option value="Transformação">Transformação</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantidade" class="form-label">Quantidade da Compra (kg)</label>
+                        <select class="form-select" id="quantidade">
+                            <option value="">Selecione a quantidade</option>
+                            <option value="12500">12.500</option>
+                            <option value="25000">25.000</option>
+                            <option value="50000">50.000</option>
+                            <option value="75000">75.000</option>
+                            <option value="100000">100.000</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="delivery_date">Previsão Entrega</label>
+                        <input type="date" id="delivery_date" name="delivery_date" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="action-buttons">
+                            <button type="button" class="btn-outline-primary" id="view-calendar">
+                                <i class="bi bi-calendar-week"></i>
+                                <span>Calendário de Entregas</span>
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="bi bi-plus-circle"></i>
+                                <span>Adicionar Carga</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Lista de Produtos -->
+            <section class="products-section">
+                <div class="section-header">
+                    <h2>Solicitação de Compras</h2>
+                    <div class="total-info">
+                        <span>Total de Cargas: <strong id="total-products">0</strong></span>
+                        <span>Peso Total: <strong id="total-weight">0 kg</strong></span>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="products-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fornecedor</th>
+                                <th>Liga</th>
+                                <th>Descrição</th>
+                                <th>Tipo</th>
+                                <th>Quantidade (kg)</th>
+                                <th>Previsão Entrega</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="section-footer">
+                    <div class="action-buttons">
+                        <button id="finalize-request" class="btn-primary">
+                            <i class="bi bi-check-circle"></i>
+                            Finalizar Solicitação
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lista de Solicitações Pendentes -->
+            <section class="pending-requests-section">
+                <h2>Solicitações Pendentes</h2>
+                <div class="table-container">
+                    <table id="pending-requests-table" class="collapsible-table">
+                        <thead>
+                            <tr>
+                                <th>ID Solicitação</th>
+                                <th>Data</th>
+                                <th>Total Cargas</th>
+                                <th>Peso Total</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Modal de Detalhes da Solicitação -->
+            <div class="modal" id="request-details-modal">
+                <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <h2>Detalhes da Solicitação #<span id="request-id"></span></h2>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="request-info">
+                            <p>Data: <span id="request-date"></span></p>
+                            <p>Status: <span id="request-status" class="status-badge"></span></p>
+                        </div>
+                        <div class="request-items">
+                            <h3>Itens da Solicitação</h3>
+                            <table id="request-items-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fornecedor</th>
+                                        <th>Liga</th>
+                                        <th>Descrição</th>
+                                        <th>Tipo</th>
+                                        <th>Quantidade (kg)</th>
+                                        <th>Previsão Entrega</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="request-actions">
+                            <button id="approve-request" class="btn-success">
+                                <i class="bi bi-check-circle-fill"></i>
+                                Aprovar
+                            </button>
+                            <button id="review-request" class="btn-warning">
+                                <i class="bi bi-pencil-square"></i>
+                                Revisar
+                            </button>
+                            <button id="reject-request" class="btn-danger">
+                                <i class="bi bi-x-circle-fill"></i>
+                                Recusar
+                            </button>
+                            <button id="print-request" class="btn-outline-primary">
+                                <i class="bi bi-printer-fill"></i>
+                                Imprimir
+                            </button>
+                            <button id="email-request" class="btn-outline-primary">
+                                <i class="bi bi-envelope-fill"></i>
+                                Enviar por E-mail
+                            </button>
+                        </div>
+                        <div class="review-form" style="display: none;">
+                            <h3>Observações para Revisão</h3>
+                            <textarea id="review-notes" rows="3" placeholder="Digite suas observações para revisão..."></textarea>
+                            <div class="form-actions">
+                                <button id="cancel-review" class="btn-outline-primary">Cancelar</button>
+                                <button id="submit-review" class="btn-primary">Enviar para Revisão</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal do Calendário -->
+            <div class="modal" id="calendar-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Calendário de Entregas</h2>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="calendar-controls">
+                            <button id="prev-month" class="btn-outline-primary">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <h3 id="current-month-display"></h3>
+                            <button id="next-month" class="btn-outline-primary">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div id="calendar"></div>
+                        <div id="day-details" class="day-details">
+                            <div class="day-header">
+                                <h4>Detalhes do Dia</h4>
+                                <span class="selected-date"></span>
+                            </div>
+                            <div class="day-products"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Edição de Data -->
+            <div class="modal" id="edit-date-modal">
+                <div class="modal-content modal-sm">
+                    <div class="modal-header">
+                        <h2>Alterar Data de Entrega</h2>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="new-delivery-date">Nova Data de Entrega</label>
+                            <input type="date" id="new-delivery-date" required>
+                        </div>
+                        <div class="product-info">
+                            <p>Fornecedor: <span id="edit-supplier"></span></p>
+                            <p>Liga: <span id="edit-alloy"></span></p>
+                            <p>Quantidade: <span id="edit-quantity"></span></p>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn-outline-primary" id="cancel-edit">Cancelar</button>
+                            <button class="btn-primary" id="confirm-edit">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <img src="https://i.im.ge/2023/06/20/iZLJXM.logoDanilo.png" alt="Logo Danilo" class="footer-logo">
+        </footer>
+    </div>
+
+    <script src="purchase_request.js"></script>
+</body>
+</html> 

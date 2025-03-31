@@ -1,0 +1,158 @@
+// Cores principais
+$primary: #1a73e8;
+$secondary: #5f6368;
+$success: #34a853;
+$danger: #ea4335;
+$warning: #fbbc04;
+$info: #4285f4;
+$light: #f8f9fa;
+$dark: #202124;
+
+// Cores de texto
+$text-primary: $dark;
+$text-secondary: $secondary;
+$text-muted: #70757a;
+$text-light: $light;
+
+// Cores de fundo
+$bg-primary: $light;
+$bg-secondary: #f1f3f4;
+$bg-success: lighten($success, 45%);
+$bg-danger: lighten($danger, 45%);
+$bg-warning: lighten($warning, 45%);
+$bg-info: lighten($info, 45%);
+
+// Cores de borda
+$border-color: #dadce0;
+$border-radius: 8px;
+$border-radius-sm: 4px;
+$border-radius-lg: 12px;
+
+// Espaçamento
+$spacing-unit: 8px;
+$spacing-xs: $spacing-unit / 2;    // 4px
+$spacing-sm: $spacing-unit;        // 8px
+$spacing-md: $spacing-unit * 2;    // 16px
+$spacing-lg: $spacing-unit * 3;    // 24px
+$spacing-xl: $spacing-unit * 4;    // 32px
+
+// Tipografia
+$font-family-base: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
+$font-family-monospace: 'Roboto Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+$font-size-base: 16px;
+$font-size-sm: 14px;
+$font-size-lg: 18px;
+$font-size-xl: 24px;
+
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+$line-height-base: 1.5;
+$line-height-sm: 1.25;
+$line-height-lg: 1.75;
+
+// Sombras
+$shadow-sm: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+$shadow-md: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+$shadow-lg: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+
+// Breakpoints
+$breakpoint-xs: 0;
+$breakpoint-sm: 600px;
+$breakpoint-md: 960px;
+$breakpoint-lg: 1280px;
+$breakpoint-xl: 1920px;
+
+// Grid
+$grid-columns: 12;
+$grid-gutter: $spacing-md;
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px
+);
+
+// Z-index
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+
+// Animações
+$transition-base: all 0.2s ease-in-out;
+$transition-fade: opacity 0.15s linear;
+$transition-collapse: height 0.35s ease;
+
+// Tabelas
+$table-cell-padding: $spacing-sm $spacing-md;
+$table-cell-padding-sm: $spacing-xs $spacing-sm;
+$table-border-color: $border-color;
+$table-striped-bg: rgba($primary, 0.05);
+$table-hover-bg: rgba($primary, 0.075);
+
+// Cards
+$card-spacer-y: $spacing-md;
+$card-spacer-x: $spacing-md;
+$card-border-radius: $border-radius;
+$card-border-color: $border-color;
+$card-box-shadow: $shadow-sm;
+
+// Inputs
+$input-padding-y: $spacing-sm;
+$input-padding-x: $spacing-md;
+$input-border-color: $border-color;
+$input-border-radius: $border-radius;
+$input-focus-border-color: $primary;
+$input-focus-box-shadow: 0 0 0 2px rgba($primary, 0.25);
+
+// Botões
+$btn-padding-y: $spacing-sm;
+$btn-padding-x: $spacing-md;
+$btn-border-radius: $border-radius;
+$btn-font-weight: $font-weight-medium;
+$btn-transition: $transition-base;
+
+// Mixins úteis
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin responsive-font($min-size, $max-size, $min-width: $breakpoint-sm, $max-width: $breakpoint-lg) {
+  font-size: $min-size;
+  
+  @media screen and (min-width: $min-width) {
+    font-size: calc(#{$min-size} + #{strip-unit($max-size - $min-size)} * ((100vw - #{$min-width}) / #{strip-unit($max-width - $min-width)}));
+  }
+  
+  @media screen and (min-width: $max-width) {
+    font-size: $max-size;
+  }
+}
+
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+  @return $number;
+} 

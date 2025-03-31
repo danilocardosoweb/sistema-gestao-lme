@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +11,7 @@
 <body>
     <div class="container">
         <nav class="navbar">
+            <img src="https://i.im.ge/2023/06/20/iZU1G0.LogoPagina.png" alt="Logo da Empresa" class="company-logo">
             <a href="index.html">Tabela de Preços</a>
             <a href="dashboard.html">Dashboard</a>
             <a href="analysis.html">Análise</a>
@@ -44,23 +45,14 @@
 
                     <div class="form-group">
                         <label for="alloy">Liga</label>
-                        <select id="alloy" name="alloy" required>
+                        <select id="alloy" name="alloy" required disabled>
                             <option value="">Selecione a liga</option>
-                            <option value="6060">6060</option>
-                            <option value="6063">6063</option>
-                            <option value="6460">6460</option>
-                            <option value="6005">6005</option>
-                            <option value="6463">6463</option>
-                            <option value="6082">6082</option>
-                            <option value="6061">6061</option>
-                            <option value="6351">6351</option>
-                            <option value="6101">6101</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="product_description">Descrição do Produto</label>
-                        <select id="product_description" name="product_description" required>
+                        <select id="product_description" name="product_description" required disabled>
                             <option value="">Selecione a descrição</option>
                         </select>
                     </div>
@@ -75,8 +67,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="quantidade" class="form-label">Quantidade da Compra (kg)</label>
-                        <select class="form-select" id="quantidade">
+                        <label for="quantidade">Quantidade da Compra (kg)</label>
+                        <select id="quantidade" name="quantidade" required>
                             <option value="">Selecione a quantidade</option>
                             <option value="12500">12.500</option>
                             <option value="25000">25.000</option>
@@ -278,6 +270,10 @@
                 </div>
             </div>
         </main>
+
+        <footer>
+            <img src="https://i.im.ge/2023/06/20/iZLJXM.logoDanilo.png" alt="Logo Danilo" class="footer-logo">
+        </footer>
     </div>
 
     <script src="purchase_request.js"></script>
