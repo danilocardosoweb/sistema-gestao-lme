@@ -53,8 +53,11 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// Determinar o diretório estático com base no ambiente
+const staticDir = process.env.NODE_ENV === 'production' ? path.join(__dirname, 'dist') : __dirname;
+
 // Servir arquivos estáticos
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(staticDir));
 
 // Middleware para verificar a saúde do servidor
 app.use((req, res, next) => {
@@ -104,6 +107,13 @@ app.use((err, req, res, next) => {
         timestamp: new Date().toISOString()
     });
 });
+
+// Rota para qualquer outra requisição em produção - serve o index.html
+if (process.env.NODE_ENV === 'production') {
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(staticDir, 'index.html'));
+    });
+}
 
 // Exportar para ambiente Vercel
 export default app;

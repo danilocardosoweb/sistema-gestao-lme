@@ -1,17 +1,12 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "server.js", "use": "@vercel/node" },
-    { "src": "api/index.js", "use": "@vercel/node" },
-    { "src": "*.html", "use": "@vercel/static" },
-    { "src": "*.css", "use": "@vercel/static" },
-    { "src": "*.js", "use": "@vercel/static" },
-    { "src": "*.json", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/api/lme", "dest": "/api" },
-    { "src": "/health", "dest": "/api" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/api/lme", "destination": "/api" },
+    { "source": "/api/(.*)", "destination": "/api" },
+    { "source": "/health", "destination": "/api" }
   ],
   "headers": [
     {
