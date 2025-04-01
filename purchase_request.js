@@ -37,9 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const supplierSelect = document.getElementById('supplier');
     const alloySelect = document.getElementById('alloy');
     const productDescriptionSelect = document.getElementById('product_description');
-    const purchaseTypeSelect = document.getElementById('purchase_type');
-    const quantitySelect = document.getElementById('quantidade');
-    const deliveryDateInput = document.getElementById('delivery_date');
     
     if (!supplierSelect || !alloySelect || !productDescriptionSelect) {
         console.error('Elementos do formulário não encontrados');
@@ -159,141 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalWeight = document.getElementById('total-weight');
     const tbody = productsTable ? productsTable.querySelector('tbody') : null;
     
-    // Array para armazenar os produtos
-    let products = [];
-    let currentDate = new Date();
-    let selectedDate = null;
-    let nextId = 1;
-    let selectedProductId = null;
-
-    // Elementos do modal de edição
-    const editDateModal = document.getElementById('edit-date-modal');
-    const newDeliveryDateInput = document.getElementById('new-delivery-date');
-    const cancelEditBtn = document.getElementById('cancel-edit');
-    const confirmEditBtn = document.getElementById('confirm-edit');
-    const editSupplierSpan = document.getElementById('edit-supplier');
-    const editAlloySpan = document.getElementById('edit-alloy');
-    const editQuantitySpan = document.getElementById('edit-quantity');
-    const selectedDateSpan = document.querySelector('.selected-date');
-
-    // Elementos do botão de finalizar
-    const finalizeRequestBtn = document.getElementById('finalize-request');
-    const pendingRequestsTableElement = document.getElementById('pending-requests-table');
-    const pendingRequestsTable = pendingRequestsTableElement ? pendingRequestsTableElement.querySelector('tbody') : null;
-    let pendingRequests = [];
-    let nextPendingId = 1;
-
-    // Carregar dados do localStorage ao iniciar
-    function loadFromLocalStorage() {
-        try {
-            // Carregar produtos
-            const savedProducts = localStorage.getItem('purchaseRequestProducts');
-            if (savedProducts) {
-                products = JSON.parse(savedProducts);
-                // Garantir que o próximo ID seja maior que o último produto
-                if (products.length > 0) {
-                    const maxId = Math.max(...products.map(p => p.id));
-                    nextId = maxId + 1;
-                }
-                updateProductsTable();
-            }
-
-            // Carregar solicitações pendentes
-            const savedPendingRequests = localStorage.getItem('pendingRequests');
-            if (savedPendingRequests) {
-                pendingRequests = JSON.parse(savedPendingRequests);
-                // Garantir que o próximo ID de solicitação pendente seja maior que o último
-                if (pendingRequests.length > 0) {
-                    const maxId = Math.max(...pendingRequests.map(p => p.id));
-                    nextPendingId = maxId + 1;
-                }
-                updatePendingRequestsTable();
-            }
-
-            // Carregar valores do formulário
-            const formData = localStorage.getItem('purchaseRequestForm');
-            if (formData) {
-                const data = JSON.parse(formData);
-                if (data.supplier) {
-                    supplierSelect.value = data.supplier;
-                    updateAlloyOptions();
-                    
-                    if (data.alloy) {
-                        alloySelect.value = data.alloy;
-                        updateProductDescriptions();
-                        
-                        if (data.productDescription) {
-                            productDescriptionSelect.value = data.productDescription;
-                        }
-                    }
-                }
-                
-                if (data.purchaseType) {
-                    purchaseTypeSelect.value = data.purchaseType;
-                }
-                
-                if (data.quantity) {
-                    quantitySelect.value = data.quantity;
-                }
-                
-                if (data.deliveryDate) {
-                    deliveryDateInput.value = data.deliveryDate;
-                }
-            }
-        } catch (error) {
-            console.error('Erro ao carregar dados do localStorage:', error);
-        }
-    }
-
-    // Salvar dados no localStorage
-    function saveToLocalStorage() {
-        try {
-            // Salvar produtos
-            localStorage.setItem('purchaseRequestProducts', JSON.stringify(products));
-            
-            // Salvar solicitações pendentes
-            localStorage.setItem('pendingRequests', JSON.stringify(pendingRequests));
-            
-            // Salvar valores do formulário
-            const formData = {
-                supplier: supplierSelect.value,
-                alloy: alloySelect.value,
-                productDescription: productDescriptionSelect.value,
-                purchaseType: purchaseTypeSelect ? purchaseTypeSelect.value : '',
-                quantity: quantitySelect ? quantitySelect.value : '',
-                deliveryDate: deliveryDateInput ? deliveryDateInput.value : ''
-            };
-            localStorage.setItem('purchaseRequestForm', JSON.stringify(formData));
-        } catch (error) {
-            console.error('Erro ao salvar dados no localStorage:', error);
-        }
-    }
-
-    // Limpar dados do localStorage após finalizar a solicitação
-    function clearLocalStorage() {
-        localStorage.removeItem('purchaseRequestProducts');
-        localStorage.removeItem('purchaseRequestForm');
-        // Não remover pendingRequests, pois precisamos manter
-    }
-
-    // Atualizar localStorage quando houver mudanças no formulário
-    function attachFormListeners() {
-        const formElements = [
-            supplierSelect, 
-            alloySelect, 
-            productDescriptionSelect, 
-            purchaseTypeSelect, 
-            quantitySelect, 
-            deliveryDateInput
-        ];
-
-        formElements.forEach(element => {
-            if (element) {
-                element.addEventListener('change', saveToLocalStorage);
-            }
-        });
-    }
-
     // Função para atualizar a tabela de produtos
     function updateProductsTable() {
         if (!tbody) return;
@@ -327,9 +189,6 @@ document.addEventListener('DOMContentLoaded', function() {
             totalWeight.textContent = `${totalWeightValue} kg`;
         }
         updateFinalizeButton();
-        
-        // Salvar produtos no localStorage após atualizar a tabela
-        saveToLocalStorage();
     }
 
     // Elementos do calendário
@@ -341,6 +200,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentMonthDisplay = document.getElementById('current-month-display');
     const calendarEl = document.getElementById('calendar');
     const dayDetailsEl = document.getElementById('day-details');
+
+    // Array para armazenar os produtos
+    let products = [];
+    let currentDate = new Date();
+    let selectedDate = null;
+    let nextId = 1;
+    let selectedProductId = null;
+
+    // Elementos do modal de edição
+    const editDateModal = document.getElementById('edit-date-modal');
+    const newDeliveryDateInput = document.getElementById('new-delivery-date');
+    const cancelEditBtn = document.getElementById('cancel-edit');
+    const confirmEditBtn = document.getElementById('confirm-edit');
+    const editSupplierSpan = document.getElementById('edit-supplier');
+    const editAlloySpan = document.getElementById('edit-alloy');
+    const editQuantitySpan = document.getElementById('edit-quantity');
+    const selectedDateSpan = document.querySelector('.selected-date');
+
+    // Elementos do botão de finalizar
+    const finalizeRequestBtn = document.getElementById('finalize-request');
+    const pendingRequestsTableElement = document.getElementById('pending-requests-table');
+    const pendingRequestsTable = pendingRequestsTableElement ? pendingRequestsTableElement.querySelector('tbody') : null;
+    let pendingRequests = [];
+    let nextPendingId = 1;
 
     // Elementos do modal de detalhes
     const requestDetailsModal = document.getElementById('request-details-modal');
@@ -455,9 +338,6 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             pendingRequestsTable.appendChild(row);
         });
-        
-        // Salvar no localStorage após atualizar a tabela
-        saveToLocalStorage();
     }
 
     // Função para visualizar detalhes da solicitação
@@ -500,36 +380,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para criar uma solicitação pendente
     function createPendingRequest() {
-        if (products.length === 0) {
-            showToast('Adicione pelo menos um produto à solicitação.', 'error');
+        if (!pendingRequestsTable) {
+            console.warn('Tabela de solicitações pendentes não encontrada');
             return;
         }
 
-        const purchaseType = products.some(p => p.purchaseType === 'Vendas') ? 'Vendas' : 'Transformação';
-        
-        const totalWeight = products.reduce((sum, product) => sum + product.quantity, 0);
-        
-        const request = {
+        const pendingRequest = {
             id: nextPendingId++,
-            date: new Date(),
-            totalProducts: products.length,
-            totalWeight: totalWeight,
-            purchaseType: purchaseType,
+            products: [...products],
+            date: new Date().toISOString(),
             status: 'Pendente',
-            products: [...products] // Cópia dos produtos
+            history: [{
+                date: new Date().toISOString(),
+                action: 'Criação',
+                notes: 'Solicitação criada'
+            }]
         };
-        
-        pendingRequests.push(request);
+        pendingRequests.push(pendingRequest);
         updatePendingRequestsTable();
         
-        // Limpar a tabela de produtos atual
+        // Limpar produtos atuais
         products = [];
         updateProductsTable();
-        
-        showToast('Solicitação finalizada com sucesso!');
-        
-        // Após finalizar a solicitação, limpar o localStorage
-        clearLocalStorage();
+        updateCalendar();
+        updateFinalizeButton();
+
+        // Mostrar toast de sucesso
+        showToast('Solicitação finalizada com sucesso!', 'success');
     }
 
     // Funções de ação nas solicitações
@@ -538,10 +415,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!request) return;
 
         request.status = 'Aprovado';
-        if (!request.history) {
-            request.history = [];
-        }
-        
         request.history.push({
             date: new Date().toISOString(),
             action: 'Aprovação',
@@ -828,81 +701,73 @@ document.addEventListener('DOMContentLoaded', function() {
         closeEditDateModal();
     }
 
-    // Enviar formulário de solicitação
-    purchaseForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+    // Event listener para o formulário
+    purchaseForm.addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        const supplier = supplierSelect.value;
-        const alloy = alloySelect.value;
-        const productDescription = productDescriptionSelect.value;
-        const purchaseType = document.getElementById('purchase_type').value;
-        const quantity = parseInt(document.getElementById('quantidade').value);
-        const deliveryDate = document.getElementById('delivery_date').value;
-        
-        if (!supplier || !alloy || !productDescription || !purchaseType || !quantity || !deliveryDate) {
-            showToast('Por favor, preencha todos os campos.', 'error');
+        // Verificar se todos os elementos necessários existem
+        const supplier = document.getElementById('supplier');
+        const alloy = document.getElementById('alloy');
+        const productDescription = document.getElementById('product_description');
+        const purchaseType = document.getElementById('purchase_type');
+        const quantidade = document.getElementById('quantidade');
+        const deliveryDate = document.getElementById('delivery_date');
+
+        if (!supplier || !alloy || !productDescription || !purchaseType || !quantidade || !deliveryDate) {
+            console.error('Elementos do formulário não encontrados');
             return;
         }
-        
-        const newProduct = {
+
+        const formData = {
             id: nextId++,
-            supplier,
-            alloy,
-            productDescription,
-            purchaseType,
-            quantity,
-            deliveryDate
+            supplier: supplier.value,
+            alloy: alloy.value,
+            productDescription: productDescription.value,
+            purchaseType: purchaseType.value,
+            quantity: parseFloat(quantidade.value),
+            deliveryDate: deliveryDate.value
         };
-        
-        products.push(newProduct);
+
+        products.push(formData);
         updateProductsTable();
         updateCalendar();
+
+        // Resetar formulário
+        this.reset();
+        productDescriptionSelect.innerHTML = '<option value="">Selecione a descrição</option>';
         
-        // Resetar o formulário, mas manter o fornecedor e liga selecionados
-        const currentSupplier = supplierSelect.value;
-        const currentAlloy = alloySelect.value;
-        
-        // Limpar apenas os campos específicos
-        document.getElementById('purchase_type').value = '';
-        document.getElementById('quantidade').value = '';
-        document.getElementById('delivery_date').value = '';
-        
-        // Manter fornecedor e liga selecionados
-        supplierSelect.value = currentSupplier;
-        alloySelect.value = currentAlloy;
-        updateProductDescriptions();
-        
-        // Salvar estado atual no localStorage com o formulário parcialmente resetado
-        saveToLocalStorage();
-        
-        showToast('Produto adicionado com sucesso!', 'success');
+        // Mostrar toast de sucesso
+        showToast('Carga adicionada com sucesso!', 'success');
     });
 
     // Event listeners do calendário
-    if (viewCalendarBtn) {
-        viewCalendarBtn.addEventListener('click', function() {
-            if (calendarModal) {
-                calendarModal.style.display = 'flex';
-                updateCalendar();
-            }
-        });
-    }
-    
-    if (finalizeRequestBtn) {
-        finalizeRequestBtn.addEventListener('click', function() {
-            createPendingRequest();
-        });
-    }
+    viewCalendarBtn.addEventListener('click', () => {
+        calendarModal.classList.add('active');
+        updateCalendar();
+    });
 
-    if (closeModal) {
-        closeModal.addEventListener('click', function() {
-            if (calendarModal) {
-                calendarModal.style.display = 'none';
-            }
-        });
-    }
+    closeModal.addEventListener('click', () => {
+        calendarModal.classList.remove('active');
+    });
 
-    // Event listeners para o modal de edição
+    prevMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        updateCalendar();
+    });
+
+    nextMonthBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        updateCalendar();
+    });
+
+    // Fechar modal ao clicar fora
+    calendarModal.addEventListener('click', (e) => {
+        if (e.target === calendarModal) {
+            calendarModal.classList.remove('active');
+        }
+    });
+
+    // Event Listeners para o modal de edição
     cancelEditBtn.addEventListener('click', closeEditDateModal);
     confirmEditBtn.addEventListener('click', updateDeliveryDate);
 
@@ -948,20 +813,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (emailRequestBtn) {
         emailRequestBtn.addEventListener('click', emailRequest);
     }
-
-    // Adicionar ao escopo global para o botão remover funcionar
-    window.removeProduct = function(id) {
-        products = products.filter(product => product.id !== id);
-        updateProductsTable();
-        // Após remover, salvar no localStorage
-        saveToLocalStorage();
-    };
-
-    // Inicializar - carregar dados do localStorage
-    loadFromLocalStorage();
-    
-    // Adicionar listeners aos campos do formulário
-    attachFormListeners();
 });
 
 // Função para formatar o mês e ano
