@@ -60,11 +60,23 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Server-Status');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
+    
+    // Adicionar Content-Type para arquivos JavaScript
+    if (req.path.endsWith('.js')) {
+        res.setHeader('Content-Type', 'application/javascript');
+    }
+    
     next();
 });
 
 // Servir arquivos estáticos
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname), {
+    setHeaders: (res, path) => {
+        if (path.endsWith('.js')) {
+            res.setHeader('Content-Type', 'application/javascript');
+        }
+    }
+}));
 
 // Middleware para verificar a saúde do servidor
 app.use((req, res, next) => {

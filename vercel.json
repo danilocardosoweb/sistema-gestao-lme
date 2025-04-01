@@ -8,6 +8,14 @@
     {
       "src": "*.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -18,6 +26,18 @@
     {
       "src": "/health",
       "dest": "server.js"
+    },
+    {
+      "src": "/(.*\\.js)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*\\.css)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*\\.html)",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
@@ -43,6 +63,10 @@
         {
           "key": "Access-Control-Allow-Credentials",
           "value": "true"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
         }
       ]
     }
