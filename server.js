@@ -28,28 +28,6 @@ async function fetchDataWithRetry(retries = MAX_RETRIES) {
         }
         const data = await response.json();
         
-        // Adicionar dados do PTAX para cada registro
-        if (data.results && Array.isArray(data.results)) {
-            for (const price of data.results) {
-                try {
-                    const date = new Date(price.data);
-                    const formattedDate = date.toISOString().split('T')[0];
-                    const ptaxUrl = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao='${formattedDate}')?$format=json`;
-                    const ptaxResponse = await fetch(ptaxUrl);
-                    const ptaxData = await ptaxResponse.json();
-                    
-                    if (ptaxData.value && ptaxData.value.length > 0) {
-                        price.dolar_ptax = ptaxData.value[0].cotacaoVenda;
-                    } else {
-                        price.dolar_ptax = null;
-                    }
-                } catch (error) {
-                    console.error(`Erro ao buscar PTAX para ${price.data}:`, error);
-                    price.dolar_ptax = null;
-                }
-            }
-        }
-        
         // Atualizar cache
         dataCache = {
             timestamp: Date.now(),

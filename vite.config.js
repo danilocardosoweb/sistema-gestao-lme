@@ -5,7 +5,7 @@ import sass from 'sass'
 export default defineConfig({
   root: '.',
   server: {
-    port: 5173,
+    port: 3000,
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
@@ -19,7 +19,6 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
     assetsDir: 'assets',
     sourcemap: true,
     rollupOptions: {
@@ -29,27 +28,6 @@ export default defineConfig({
         analysis: resolve(__dirname, 'analysis.html'),
         purchase: resolve(__dirname, 'purchase_request.html'),
         consumption: resolve(__dirname, 'consumption_analysis.html')
-      },
-      output: {
-        entryFileNames: 'assets/[name].[hash].js',
-        chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash].[ext]'
-      }
-    }
-  },
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
-      '@shared': resolve(__dirname, 'src/shared'),
-      '@components': resolve(__dirname, 'src/components'),
-      '@utils': resolve(__dirname, 'src/utils'),
-      '@styles': resolve(__dirname, 'src/styles')
-    }
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "@styles/themes/variables.scss";`
       }
     }
   }

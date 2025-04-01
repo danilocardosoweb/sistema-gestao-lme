@@ -43,61 +43,112 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    // Função para atualizar as ligas disponíveis com base no fornecedor selecionado
-    function updateAlloys() {
+    // Configuração inicial: desabilitar os selects de liga e descrição
+    alloySelect.disabled = true;
+    productDescriptionSelect.disabled = true;
+    
+    // Função para atualizar as opções de liga com base no fornecedor selecionado
+    function updateAlloyOptions() {
         const supplier = supplierSelect.value;
-        alloySelect.innerHTML = '<option value="">Selecione a liga</option>';
-        alloySelect.disabled = !supplier;
         
-        if (supplier && productData[supplier]) {
-            Object.keys(productData[supplier]).forEach(alloy => {
+        // Limpar select de liga
+        alloySelect.innerHTML = '<option value="">Selecione a liga</option>';
+        
+        // Limpar e desabilitar select de descrição
+        productDescriptionSelect.innerHTML = '<option value="">Selecione a descrição</option>';
+        productDescriptionSelect.disabled = true;
+        
+        // Se não tiver fornecedor selecionado, desabilitar select de liga
+        if (!supplier) {
+            alloySelect.disabled = true;
+            return;
+        }
+        
+        // Habilitar select de liga
+        alloySelect.disabled = false;
+        
+        // Preencher opções de liga para o fornecedor selecionado
+        if (productData[supplier]) {
+            const alloys = Object.keys(productData[supplier]);
+            alloys.forEach(alloy => {
                 const option = document.createElement('option');
                 option.value = alloy;
                 option.textContent = alloy;
                 alloySelect.appendChild(option);
             });
         }
-        
-        // Limpar e desabilitar a descrição do produto quando mudar o fornecedor
-        productDescriptionSelect.innerHTML = '<option value="">Selecione a descrição</option>';
-        productDescriptionSelect.disabled = true;
     }
-
+    
     // Função para atualizar as descrições de produtos
     function updateProductDescriptions() {
         const supplier = supplierSelect.value;
         const alloy = alloySelect.value;
         
-        productDescriptionSelect.innerHTML = '<option value="">Selecione a descrição</option>';
-        productDescriptionSelect.disabled = true;
+        console.log('Atualizando descrições:', { supplier, alloy });
         
-        if (supplier && alloy && productData[supplier] && productData[supplier][alloy]) {
-            productData[supplier][alloy].forEach(description => {
+        // Limpar select de descrição
+        productDescriptionSelect.innerHTML = '<option value="">Selecione a descrição</option>';
+        
+        // Se não tiver fornecedor ou liga selecionados, desabilitar select de descrição
+        if (!supplier || !alloy) {
+            productDescriptionSelect.disabled = true;
+            return;
+        }
+        
+        // Se existirem dados para esta combinação
+        if (productData[supplier] && productData[supplier][alloy]) {
+            console.log('Dados encontrados:', productData[supplier][alloy]);
+            
+            // Se houver apenas uma descrição, selecionar automaticamente
+            if (productData[supplier][alloy].length === 1) {
+                const description = productData[supplier][alloy][0];
                 const option = document.createElement('option');
                 option.value = description;
                 option.textContent = description;
+                option.selected = true;
                 productDescriptionSelect.appendChild(option);
-            });
-            productDescriptionSelect.disabled = false;
-            
-            // Se houver apenas uma descrição, seleciona automaticamente
-            if (productData[supplier][alloy].length === 1) {
-                productDescriptionSelect.value = productData[supplier][alloy][0];
+                productDescriptionSelect.disabled = false;
+            } 
+            // Se houver múltiplas descrições (embora no momento só temos uma por liga)
+            else {
+                productData[supplier][alloy].forEach(description => {
+                    const option = document.createElement('option');
+                    option.value = description;
+                    option.textContent = description;
+                    productDescriptionSelect.appendChild(option);
+                });
+                
+                // Selecionar automaticamente a primeira opção
+                if (productDescriptionSelect.options.length > 1) {
+                    productDescriptionSelect.options[1].selected = true;
+                }
+                
+                productDescriptionSelect.disabled = false;
             }
+        } else {
+            console.log('Nenhum dado encontrado para esta combinação');
+            productDescriptionSelect.disabled = true;
         }
     }
 
-    // Event listeners para atualização das descrições de produtos
+    // Event listeners para atualização das opções de liga e descrições de produtos
     supplierSelect.addEventListener('change', function() {
-        updateAlloys();
-        updateProductDescriptions();
+        console.log('Fornecedor alterado:', this.value);
+        updateAlloyOptions();
     });
 
-    alloySelect.addEventListener('change', updateProductDescriptions);
+    alloySelect.addEventListener('change', function() {
+        console.log('Liga alterada:', this.value);
+        updateProductDescriptions();
+        
+        // Disparar evento de change no select de descrição para garantir que o formulário registre a seleção automática
+        if (productDescriptionSelect.options.length > 0 && productDescriptionSelect.selectedIndex > 0) {
+            productDescriptionSelect.dispatchEvent(new Event('change'));
+        }
+    });
 
     // Inicializar os selects
-    updateAlloys();
-    updateProductDescriptions();
+    updateAlloyOptions();
     
     // Elementos da tabela
     const productsTable = document.getElementById('products-table');
@@ -266,12 +317,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const totalQuantity = request.products.reduce((sum, product) => sum + product.quantity, 0);
             const formattedDate = formatDate(request.date);
             
+            // Verificar os tipos de compra na solicitação
+            const purchaseTypes = [...new Set(request.products.map(product => product.purchaseType))];
+            const typesString = purchaseTypes.join(', ');
+            
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>#${request.id}</td>
                 <td>${formattedDate}</td>
                 <td>${request.products.length} item(s)</td>
                 <td>${formatNumber(totalQuantity)} kg</td>
+                <td>${typesString}</td>
                 <td><span class="status-badge status-${request.status.toLowerCase()}">${request.status}</span></td>
                 <td>
                     <button class="btn-outline-primary" onclick="viewRequestDetails(${request.id})">
@@ -522,10 +578,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (dayProducts.length > 0) {
                 dayEl.classList.add('has-products');
             }
-            if (selectedDate && 
-                date.getFullYear() === selectedDate.getFullYear() &&
-                date.getMonth() === selectedDate.getMonth() &&
-                date.getDate() === selectedDate.getDate()) {
+            if (selectedDate && date.toDateString() === selectedDate.toDateString()) {
                 dayEl.classList.add('selected');
             }
 
@@ -546,18 +599,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Adicionar a última semana
         calendarEl.appendChild(weekDiv);
-
-        // Se houver uma data selecionada, atualizar os detalhes do dia
-        if (selectedDate) {
-            updateDayDetails(selectedDate);
-        }
     }
 
     function updateDayDetails(date) {
         const dayProducts = getProductsForDate(date);
         const dayProductsEl = document.querySelector('.day-products');
-        const selectedDateSpan = document.querySelector('.selected-date');
-        
         const formattedDate = new Intl.DateTimeFormat('pt-BR', { 
             weekday: 'long', 
             year: 'numeric', 
@@ -565,15 +611,7 @@ document.addEventListener('DOMContentLoaded', function() {
             day: 'numeric' 
         }).format(date);
 
-        if (selectedDateSpan) {
-            selectedDateSpan.textContent = formattedDate;
-        }
-
-        if (!dayProductsEl) {
-            console.error('Elemento day-products não encontrado');
-            return;
-        }
-
+        selectedDateSpan.textContent = formattedDate;
         dayProductsEl.innerHTML = '';
 
         if (dayProducts.length === 0) {
@@ -620,11 +658,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function getProductsForDate(date) {
         return products.filter(product => {
             const productDate = new Date(product.deliveryDate);
-            return (
-                productDate.getFullYear() === date.getFullYear() &&
-                productDate.getMonth() === date.getMonth() &&
-                productDate.getDate() === date.getDate()
-            );
+            return productDate.toDateString() === date.toDateString();
         });
     }
 
