@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node src/server/server.js",
-    "vercel-build": "npm run build",
+    "vercel-build": "vite build && cp src/server/server.js dist/",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx",
     "format": "prettier --write .",
