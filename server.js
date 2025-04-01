@@ -47,7 +47,11 @@ async function fetchDataWithRetry(retries = MAX_RETRIES) {
 }
 
 // Habilitar CORS
-app.use(cors());
+app.use(cors({
+    origin: '*', // Permitir todas as origens em ambiente de desenvolvimento
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Servir arquivos estáticos
 app.use(express.static(path.join(__dirname)));
@@ -101,6 +105,12 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-}); 
+// Exportar para ambiente Vercel
+export default app;
+
+// Iniciar o servidor apenas se não for um ambiente serverless (como Vercel)
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Servidor rodando em http://localhost:${PORT}`);
+    });
+} 

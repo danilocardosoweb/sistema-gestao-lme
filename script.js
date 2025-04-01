@@ -1,5 +1,5 @@
 // Configuração da API
-const API_URL = 'http://localhost:3000/api/lme';
+const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000/api/lme' : '/api/lme';
 const PTAX_API_BASE_URL = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata';
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000;
