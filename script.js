@@ -1,5 +1,12 @@
 // Configuração da API
-const API_URL = 'http://localhost:3000/api/lme';
+const API_URL = process.env.NODE_ENV === 'production' 
+    ? 'https://sistema-gestao-lme.vercel.app/api/lme'
+    : 'http://localhost:3000/api/lme';
+
+const SERVER_URL = process.env.NODE_ENV === 'production'
+    ? 'https://sistema-gestao-lme.vercel.app'
+    : 'http://localhost:3000';
+
 const PTAX_API_BASE_URL = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata';
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000;
@@ -494,22 +501,25 @@ async function fetchAndUpdateData() {
 // Verificar status do servidor antes de iniciar
 async function checkServerHealth() {
     try {
-        const response = await fetchWithRetry(API_URL.replace('/api/lme', '/health'));
-        const data = await response.json();
-        if (data.status === 'healthy') {
-            // Iniciar atualização de dados
-            fetchAndUpdateData();
-            // Configurar intervalo de atualização
-            setInterval(fetchAndUpdateData, 5 * 60 * 1000);
+        const response = await fetch(`${SERVER_URL}/health`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            mode: 'cors',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const data = await response.json();
+        return data.status === 'healthy';
     } catch (error) {
-        console.error('Erro ao verificar status do servidor:', error);
-        const container = document.querySelector('.data-container');
-        showErrorMessage(
-            'Não foi possível conectar ao servidor. Tentando novamente em 30 segundos...',
-            container
-        );
-        setTimeout(checkServerHealth, 30000);
+        console.error('Erro ao verificar saúde do servidor:', error);
+        return false;
     }
 }
 

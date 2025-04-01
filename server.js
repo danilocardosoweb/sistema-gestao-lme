@@ -28,28 +28,6 @@ async function fetchDataWithRetry(retries = MAX_RETRIES) {
         }
         const data = await response.json();
         
-        // Adicionar dados do PTAX para cada registro
-        if (data.results && Array.isArray(data.results)) {
-            for (const price of data.results) {
-                try {
-                    const date = new Date(price.data);
-                    const formattedDate = date.toISOString().split('T')[0];
-                    const ptaxUrl = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao='${formattedDate}')?$format=json`;
-                    const ptaxResponse = await fetch(ptaxUrl);
-                    const ptaxData = await ptaxResponse.json();
-                    
-                    if (ptaxData.value && ptaxData.value.length > 0) {
-                        price.dolar_ptax = ptaxData.value[0].cotacaoVenda;
-                    } else {
-                        price.dolar_ptax = null;
-                    }
-                } catch (error) {
-                    console.error(`Erro ao buscar PTAX para ${price.data}:`, error);
-                    price.dolar_ptax = null;
-                }
-            }
-        }
-        
         // Atualizar cache
         dataCache = {
             timestamp: Date.now(),
@@ -69,7 +47,21 @@ async function fetchDataWithRetry(retries = MAX_RETRIES) {
 }
 
 // Habilitar CORS
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://sistema-gestao-lme.vercel.app'],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Server-Status'],
+    credentials: true
+}));
+
+// Adicionar headers de segurança
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Server-Status');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    next();
+});
 
 // Servir arquivos estáticos
 app.use(express.static(path.join(__dirname)));
