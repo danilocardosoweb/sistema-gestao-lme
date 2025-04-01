@@ -19,11 +19,28 @@
             "destination": "src/server/server.js"
         },
         {
-            "source": "/(.*)",
-            "destination": "/index.html"
+            "source": "/assets/:path*",
+            "destination": "/assets/:path*"
+        },
+        {
+            "source": "/:path*",
+            "destination": "/:path*"
         }
     ],
     "headers": [
+        {
+            "source": "/assets/(.*)",
+            "headers": [
+                {
+                    "key": "Content-Type",
+                    "value": "application/javascript"
+                },
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=31536000, immutable"
+                }
+            ]
+        },
         {
             "source": "/(.*)",
             "headers": [

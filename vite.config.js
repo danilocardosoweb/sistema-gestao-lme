@@ -29,6 +29,11 @@ export default defineConfig({
         analysis: resolve(__dirname, 'analysis.html'),
         purchase: resolve(__dirname, 'purchase_request.html'),
         consumption: resolve(__dirname, 'consumption_analysis.html')
+      },
+      output: {
+        entryFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]'
       }
     }
   },
