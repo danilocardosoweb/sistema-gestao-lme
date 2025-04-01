@@ -95,10 +95,7 @@ function createChart(ctx, type, data, options, chartKey) {
     // Criar novo gráfico
     charts[chartKey] = new Chart(ctx, {
         type: type,
-        data: {
-            labels: data.labels,
-            datasets: data.datasets
-        },
+        data: data,
         options: {
             ...options,
             responsive: true,
@@ -106,21 +103,6 @@ function createChart(ctx, type, data, options, chartKey) {
             plugins: {
                 legend: {
                     display: false
-                },
-                title: {
-                    display: true,
-                    text: data.title || '',
-                    color: chartColors.textColor,
-                    font: {
-                        size: 16,
-                        weight: 'bold'
-                    },
-                    padding: 20
-                },
-                tooltip: {
-                    enabled: true,
-                    mode: 'index',
-                    intersect: false
                 }
             },
             scales: {
@@ -150,15 +132,6 @@ function createChart(ctx, type, data, options, chartKey) {
 // Função para atualizar gráficos
 function updateCharts(prices, metal) {
     const sortedPrices = [...prices].sort((a, b) => new Date(a.data) - new Date(b.data));
-    const metalUpperCase = metal.toUpperCase();
-    const metalKey = metal.toLowerCase();
-    
-    const getValue = (price) => {
-        if (metalKey === 'dolar_ptax') {
-            return price.dolar_ptax;
-        }
-        return price[metalKey];
-    };
     
     try {
         // Gráfico Diário
@@ -166,14 +139,14 @@ function updateCharts(prices, metal) {
         const dailyData = {
             labels: sortedPrices.map(p => formatDate(p.data)),
             datasets: [{
-                data: sortedPrices.map(p => getValue(p)),
+                label: metal.toUpperCase(),
+                data: sortedPrices.map(p => p[metal]),
                 backgroundColor: chartColors.backgroundColor,
                 borderColor: chartColors.borderColor,
                 borderWidth: 2,
                 tension: 0.4,
                 fill: true
-            }],
-            title: `Evolução Diária do ${metalUpperCase}`
+            }]
         };
         createChart(dailyCtx, 'line', dailyData, {}, 'daily');
 
@@ -182,11 +155,11 @@ function updateCharts(prices, metal) {
             .sort(([weekA], [weekB]) => weekA - weekB)
             .map(([week, prices]) => ({
                 week: `Semana ${week}`,
-                average: calculateAverage(prices.map(p => getValue(p)))
+                average: calculateAverage(prices.map(p => p[metal]))
             }));
 
         const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
-        const weeklyChartData = {
+        createChart(weeklyCtx, 'line', {
             labels: weeklyData.map(d => d.week),
             datasets: [{
                 data: weeklyData.map(d => d.average),
@@ -195,21 +168,19 @@ function updateCharts(prices, metal) {
                 borderWidth: 2,
                 tension: 0.4,
                 fill: true
-            }],
-            title: `Evolução Semanal do ${metalUpperCase}`
-        };
-        createChart(weeklyCtx, 'line', weeklyChartData, {}, 'weekly');
+            }]
+        }, {}, 'weekly');
 
         // Gráfico Mensal
         const monthlyData = Object.entries(groupByMonth(sortedPrices))
             .sort(([monthA], [monthB]) => monthA.localeCompare(monthB))
             .map(([month, prices]) => ({
                 month: month.split('-')[1] + '/' + month.split('-')[0],
-                average: calculateAverage(prices.map(p => getValue(p)))
+                average: calculateAverage(prices.map(p => p[metal]))
             }));
 
         const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-        const monthlyChartData = {
+        createChart(monthlyCtx, 'line', {
             labels: monthlyData.map(d => d.month),
             datasets: [{
                 data: monthlyData.map(d => d.average),
@@ -218,10 +189,8 @@ function updateCharts(prices, metal) {
                 borderWidth: 2,
                 tension: 0.4,
                 fill: true
-            }],
-            title: `Evolução Mensal do ${metalUpperCase}`
-        };
-        createChart(monthlyCtx, 'line', monthlyChartData, {}, 'monthly');
+            }]
+        }, {}, 'monthly');
     } catch (error) {
         console.error('Erro ao atualizar gráficos:', error);
     }
@@ -233,28 +202,17 @@ function updateVariationCards(prices, metal) {
 
     // Ordenar preços por data
     const sortedPrices = [...prices].sort((a, b) => new Date(b.data) - new Date(a.data));
-    const metalKey = metal.toLowerCase();
-    
-    const getValue = (price) => {
-        if (metalKey === 'dolar_ptax') {
-            return price.dolar_ptax;
-        }
-        return price[metalKey];
-    };
     
     // Variação Diária
     const today = sortedPrices[0];
     const yesterday = sortedPrices[1];
     if (today && yesterday) {
-        const todayValue = getValue(today);
-        const yesterdayValue = getValue(yesterday);
-        const dailyVariation = ((todayValue - yesterdayValue) / yesterdayValue) * 100;
-        
+        const dailyVariation = ((today[metal] - yesterday[metal]) / yesterday[metal]) * 100;
         document.querySelector('.card:nth-child(1) h3').textContent = `Variação Diária do ${metal.toUpperCase()}`;
         document.querySelector('.card:nth-child(1) .price-date:nth-child(1)').textContent = `Em ${formatDate(today.data)}`;
-        document.querySelector('.card:nth-child(1) .price-value:nth-child(2)').textContent = formatNumber(todayValue);
+        document.querySelector('.card:nth-child(1) .price-value:nth-child(2)').textContent = formatNumber(today[metal]);
         document.querySelector('.card:nth-child(1) .price-date:nth-child(3)').textContent = `Em ${formatDate(yesterday.data)}`;
-        document.querySelector('.card:nth-child(1) .price-value:nth-child(4)').textContent = formatNumber(yesterdayValue);
+        document.querySelector('.card:nth-child(1) .price-value:nth-child(4)').textContent = formatNumber(yesterday[metal]);
         const dailyVariationElement = document.querySelector('.card:nth-child(1) .variation');
         dailyVariationElement.textContent = `${dailyVariation >= 0 ? '↑' : '↓'} ${formatVariation(dailyVariation)}%`;
         dailyVariationElement.className = `variation ${dailyVariation >= 0 ? 'positive' : 'negative'}`;
@@ -264,8 +222,8 @@ function updateVariationCards(prices, metal) {
     const weeklyGroups = groupByWeek(sortedPrices);
     const weeks = Object.keys(weeklyGroups).sort((a, b) => b - a);
     if (weeks.length >= 2) {
-        const thisWeekAvg = calculateAverage(weeklyGroups[weeks[0]].map(p => getValue(p)));
-        const lastWeekAvg = calculateAverage(weeklyGroups[weeks[1]].map(p => getValue(p)));
+        const thisWeekAvg = calculateAverage(weeklyGroups[weeks[0]].map(p => p[metal]));
+        const lastWeekAvg = calculateAverage(weeklyGroups[weeks[1]].map(p => p[metal]));
         const weeklyVariation = ((thisWeekAvg - lastWeekAvg) / lastWeekAvg) * 100;
 
         document.querySelector('.card:nth-child(2) h3').textContent = `Variação Semanal do ${metal.toUpperCase()}`;
@@ -282,8 +240,8 @@ function updateVariationCards(prices, metal) {
     const monthlyGroups = groupByMonth(sortedPrices);
     const months = Object.keys(monthlyGroups).sort().reverse();
     if (months.length >= 2) {
-        const thisMonthAvg = calculateAverage(monthlyGroups[months[0]].map(p => getValue(p)));
-        const lastMonthAvg = calculateAverage(monthlyGroups[months[1]].map(p => getValue(p)));
+        const thisMonthAvg = calculateAverage(monthlyGroups[months[0]].map(p => p[metal]));
+        const lastMonthAvg = calculateAverage(monthlyGroups[months[1]].map(p => p[metal]));
         const monthlyVariation = ((thisMonthAvg - lastMonthAvg) / lastMonthAvg) * 100;
 
         document.querySelector('.card:nth-child(3) h3').textContent = `Variação Mensal do ${metal.toUpperCase()}`;
