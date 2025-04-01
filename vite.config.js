@@ -3,7 +3,7 @@ import { resolve } from 'path'
 import sass from 'sass'
 
 export default defineConfig({
-  root: 'src/client',
+  root: '.',
   server: {
     port: 5173,
     proxy: {
@@ -18,27 +18,27 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: '../../dist',
+    outDir: 'dist',
     emptyOutDir: true,
     assetsDir: 'assets',
     sourcemap: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'src/client/pages/index.html'),
-        dashboard: resolve(__dirname, 'src/client/pages/dashboard/index.html'),
-        analysis: resolve(__dirname, 'src/client/pages/analysis/index.html'),
-        purchase: resolve(__dirname, 'src/client/pages/purchase/index.html'),
-        consumption: resolve(__dirname, 'src/client/pages/consumption/index.html')
+        main: resolve(__dirname, 'index.html'),
+        dashboard: resolve(__dirname, 'dashboard.html'),
+        analysis: resolve(__dirname, 'analysis.html'),
+        purchase: resolve(__dirname, 'purchase_request.html'),
+        consumption: resolve(__dirname, 'consumption_analysis.html')
       }
     }
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src/client'),
+      '@': resolve(__dirname, 'src'),
       '@shared': resolve(__dirname, 'src/shared'),
-      '@components': resolve(__dirname, 'src/client/components'),
-      '@utils': resolve(__dirname, 'src/client/utils'),
-      '@styles': resolve(__dirname, 'src/client/styles')
+      '@components': resolve(__dirname, 'src/components'),
+      '@utils': resolve(__dirname, 'src/utils'),
+      '@styles': resolve(__dirname, 'src/styles')
     }
   },
   css: {
