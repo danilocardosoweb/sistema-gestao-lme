@@ -8,16 +8,30 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Habilitar CORS
-app.use(cors());
+// Habilitar CORS com opções específicas para o Vercel
+app.use(cors({
+    origin: process.env.VERCEL_URL || '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Servir arquivos estáticos
-app.use(express.static(path.join(__dirname, '../client')));
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../../dist')));
+} else {
+    app.use(express.static(path.join(__dirname, '../client')));
+}
 
 // Rotas da API
-app.use(lmeRoutes);
+app.use('/api', lmeRoutes);
+
+// Rota para servir o index.html em produção
+if (process.env.NODE_ENV === 'production') {
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../../dist/index.html'));
+    });
+}
 
 // Tratamento de erros global
 app.use((err, req, res, next) => {
@@ -29,6 +43,13 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-}); 
+// Exportar para uso com serverless
+export default app;
+
+// Iniciar servidor apenas se não estiver no Vercel
+if (!process.env.VERCEL) {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Servidor rodando em http://localhost:${PORT}`);
+    });
+} 
