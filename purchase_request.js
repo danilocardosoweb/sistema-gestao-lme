@@ -166,6 +166,23 @@ document.addEventListener('DOMContentLoaded', function() {
     let nextId = 1;
     let selectedProductId = null;
 
+    // Elementos do modal de edição
+    const editDateModal = document.getElementById('edit-date-modal');
+    const newDeliveryDateInput = document.getElementById('new-delivery-date');
+    const cancelEditBtn = document.getElementById('cancel-edit');
+    const confirmEditBtn = document.getElementById('confirm-edit');
+    const editSupplierSpan = document.getElementById('edit-supplier');
+    const editAlloySpan = document.getElementById('edit-alloy');
+    const editQuantitySpan = document.getElementById('edit-quantity');
+    const selectedDateSpan = document.querySelector('.selected-date');
+
+    // Elementos do botão de finalizar
+    const finalizeRequestBtn = document.getElementById('finalize-request');
+    const pendingRequestsTableElement = document.getElementById('pending-requests-table');
+    const pendingRequestsTable = pendingRequestsTableElement ? pendingRequestsTableElement.querySelector('tbody') : null;
+    let pendingRequests = [];
+    let nextPendingId = 1;
+
     // Carregar dados do localStorage ao iniciar
     function loadFromLocalStorage() {
         try {
@@ -179,6 +196,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     nextId = maxId + 1;
                 }
                 updateProductsTable();
+            }
+
+            // Carregar solicitações pendentes
+            const savedPendingRequests = localStorage.getItem('pendingRequests');
+            if (savedPendingRequests) {
+                pendingRequests = JSON.parse(savedPendingRequests);
+                // Garantir que o próximo ID de solicitação pendente seja maior que o último
+                if (pendingRequests.length > 0) {
+                    const maxId = Math.max(...pendingRequests.map(p => p.id));
+                    nextPendingId = maxId + 1;
+                }
+                updatePendingRequestsTable();
             }
 
             // Carregar valores do formulário
@@ -222,6 +251,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Salvar produtos
             localStorage.setItem('purchaseRequestProducts', JSON.stringify(products));
             
+            // Salvar solicitações pendentes
+            localStorage.setItem('pendingRequests', JSON.stringify(pendingRequests));
+            
             // Salvar valores do formulário
             const formData = {
                 supplier: supplierSelect.value,
@@ -241,6 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function clearLocalStorage() {
         localStorage.removeItem('purchaseRequestProducts');
         localStorage.removeItem('purchaseRequestForm');
+        // Não remover pendingRequests, pois precisamos manter
     }
 
     // Atualizar localStorage quando houver mudanças no formulário
@@ -308,23 +341,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentMonthDisplay = document.getElementById('current-month-display');
     const calendarEl = document.getElementById('calendar');
     const dayDetailsEl = document.getElementById('day-details');
-
-    // Elementos do modal de edição
-    const editDateModal = document.getElementById('edit-date-modal');
-    const newDeliveryDateInput = document.getElementById('new-delivery-date');
-    const cancelEditBtn = document.getElementById('cancel-edit');
-    const confirmEditBtn = document.getElementById('confirm-edit');
-    const editSupplierSpan = document.getElementById('edit-supplier');
-    const editAlloySpan = document.getElementById('edit-alloy');
-    const editQuantitySpan = document.getElementById('edit-quantity');
-    const selectedDateSpan = document.querySelector('.selected-date');
-
-    // Elementos do botão de finalizar
-    const finalizeRequestBtn = document.getElementById('finalize-request');
-    const pendingRequestsTableElement = document.getElementById('pending-requests-table');
-    const pendingRequestsTable = pendingRequestsTableElement ? pendingRequestsTableElement.querySelector('tbody') : null;
-    let pendingRequests = [];
-    let nextPendingId = 1;
 
     // Elementos do modal de detalhes
     const requestDetailsModal = document.getElementById('request-details-modal');
@@ -439,6 +455,9 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             pendingRequestsTable.appendChild(row);
         });
+        
+        // Salvar no localStorage após atualizar a tabela
+        saveToLocalStorage();
     }
 
     // Função para visualizar detalhes da solicitação
@@ -519,6 +538,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!request) return;
 
         request.status = 'Aprovado';
+        if (!request.history) {
+            request.history = [];
+        }
+        
         request.history.push({
             date: new Date().toISOString(),
             action: 'Aprovação',

@@ -2631,3 +2631,45 @@ td:first-child {
         font-size: 0.9em;
     }
 }
+
+/* Estilo para o formulário de revisão */
+.review-form {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--surface-color);
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+}
+
+.review-form h3 {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.review-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9rem;
+    resize: vertical;
+    margin-bottom: 15px;
+    height: 100px;
+}
+
+.review-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+}
+
+.review-form .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
