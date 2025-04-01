@@ -1,74 +1,26 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.css",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/health",
-      "dest": "server.js"
-    },
-    {
-      "src": "/(.*\\.js)",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*\\.css)",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*\\.html)",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
+    "version": 2,
+    "builds": [
         {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
+            "src": "src/server/server.js",
+            "use": "@vercel/node"
         },
         {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization, X-Server-Status"
-        },
-        {
-          "key": "Access-Control-Allow-Credentials",
-          "value": "true"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
+            "src": "src/client/**",
+            "use": "@vercel/static"
         }
-      ]
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "src/server/server.js"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "src/client/$1"
+        }
+    ],
+    "env": {
+        "NODE_ENV": "production"
     }
-  ]
 } 
