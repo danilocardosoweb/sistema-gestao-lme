@@ -13,22 +13,16 @@
             }
         }
     ],
-    "routes": [
+    "rewrites": [
         {
-            "src": "/api/(.*)",
-            "dest": "src/server/server.js"
+            "source": "/api/:path*",
+            "destination": "src/server/server.js"
         },
         {
-            "handle": "filesystem"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/index.html"
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
     ],
-    "env": {
-        "NODE_ENV": "production"
-    },
     "headers": [
         {
             "source": "/(.*)",
@@ -47,5 +41,8 @@
                 }
             ]
         }
-    ]
+    ],
+    "env": {
+        "NODE_ENV": "production"
+    }
 } 
