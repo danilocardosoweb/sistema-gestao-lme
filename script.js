@@ -1,7 +1,5 @@
 // Configuração da API
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-    ? 'http://localhost:3000/api/lme' 
-    : `${window.location.origin}/api/lme`;
+const API_URL = '/api/lme';
 const PTAX_API_BASE_URL = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata';
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000;
@@ -505,13 +503,15 @@ async function fetchAndUpdateData() {
 // Verificar status do servidor antes de iniciar
 async function checkServerHealth() {
     try {
-        const response = await fetchWithRetry(API_URL.replace('/api/lme', '/health'));
-        const data = await response.json();
-        if (data.status === 'healthy') {
+        // Usar a própria rota da API como health check
+        const response = await fetchWithRetry(API_URL);
+        if (response.ok) {
             // Iniciar atualização de dados
             fetchAndUpdateData();
             // Configurar intervalo de atualização
             setInterval(fetchAndUpdateData, 5 * 60 * 1000);
+        } else {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
     } catch (error) {
         console.error('Erro ao verificar status do servidor:', error);
