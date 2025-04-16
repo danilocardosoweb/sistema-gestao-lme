@@ -1,0 +1,64 @@
+/* 
+ * Sistema de Gestão LME - Estilos do Cabeçalho
+ * Data: 11/04/2025
+ * 
+ * Este arquivo contém os estilos específicos para o cabeçalho do sistema.
+ */
+
+header {
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--gradient-header);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    color: var(--color-text);
+}
+
+header h1 {
+    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+}
+
+header p {
+    color: var(--color-text-secondary);
+    margin-bottom: 0;
+}
+
+.header-nav {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-md);
+}
+
+.header-nav a {
+    color: var(--color-text);
+    margin: 0 var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-normal);
+}
+
+.header-nav a:hover,
+.header-nav a.active {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: var(--spacing-sm);
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .header-nav {
+        flex-wrap: wrap;
+    }
+    
+    .header-nav a {
+        margin-bottom: var(--spacing-xs);
+    }
+}

@@ -1,0 +1,41 @@
+/* 
+ * Sistema de Gestão LME - Estilos do Cabeçalho de Conteúdo
+ * Data: 11/04/2025
+ */
+
+.content-header {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: linear-gradient(135deg, #1f3b5a 0%, #366ea2 100%);
+    border-radius: 10px;
+    box-shadow: 0 3px 4px rgba(12, 35, 62, 0.25);
+    color: var(--color-text);
+}
+
+.content-header h1 {
+    color: var(--color-text);
+    margin-bottom: 5px;
+    font-size: 2em;
+    text-shadow: 1px 1px 3px rgba(12, 35, 62, 0.3);
+}
+
+.content-header .subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1em;
+    margin-top: 0;
+}
+
+@media (max-width: 768px) {
+    .content-header {
+        padding: 12px;
+    }
+    
+    .content-header h1 {
+        font-size: 1.5em;
+    }
+    
+    .content-header .subtitle {
+        font-size: 0.9em;
+    }
+}

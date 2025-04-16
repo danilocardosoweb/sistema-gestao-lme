@@ -1,0 +1,195 @@
+/* 
+ * Sistema de Gestão LME - Estilos de Tabelas
+ * Data: 11/04/2025
+ * 
+ * Este arquivo contém os estilos para todas as tabelas do sistema.
+ */
+
+/* Container de tabela */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background: var(--transparency-light);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    border: var(--border-light);
+}
+
+/* Tabela base */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: var(--color-text);
+}
+
+/* Cabeçalho da tabela */
+.table th {
+    background: linear-gradient(180deg, rgba(74, 144, 226, 0.1) 0%, rgba(74, 144, 226, 0.05) 100%);
+    color: var(--color-primary);
+    padding: var(--spacing-md);
+    text-align: left;
+    font-weight: var(--font-weight-medium);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid rgba(74, 144, 226, 0.2);
+}
+
+/* Células da tabela */
+.table td {
+    padding: var(--spacing-md);
+    border-bottom: var(--border-light);
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Alinhamento de células */
+.table .text-right {
+    text-align: right;
+}
+
+.table .text-center {
+    text-align: center;
+}
+
+.table .text-left {
+    text-align: left;
+}
+
+/* Linhas da tabela */
+.table tr {
+    transition: var(--transition-normal);
+}
+
+.table tbody tr:hover {
+    background: var(--transparency-medium);
+}
+
+/* Linhas com estados */
+.table tr.active {
+    background: var(--color-primary-light);
+}
+
+.table tr.success {
+    background: rgba(46, 204, 113, 0.1);
+}
+
+.table tr.warning {
+    background: rgba(241, 196, 15, 0.1);
+}
+
+.table tr.danger {
+    background: rgba(231, 76, 60, 0.1);
+}
+
+/* Células com estados */
+.table td.active {
+    background: var(--color-primary-light);
+}
+
+.table td.success {
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+}
+
+.table td.warning {
+    background: rgba(241, 196, 15, 0.1);
+    color: #f1c40f;
+}
+
+.table td.danger {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+}
+
+/* Tabela compacta */
+.table-sm th,
+.table-sm td {
+    padding: var(--spacing-sm);
+}
+
+/* Tabela com bordas */
+.table-bordered {
+    border: var(--border-light);
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: var(--border-light);
+}
+
+/* Tabela sem bordas */
+.table-borderless th,
+.table-borderless td,
+.table-borderless {
+    border: none;
+}
+
+/* Tabela listrada */
+.table-striped tbody tr:nth-of-type(odd) {
+    background: var(--transparency-light);
+}
+
+/* Tabela responsiva */
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Paginação de tabela */
+.table-pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: var(--transparency-light);
+    border-top: var(--border-light);
+}
+
+.table-pagination .btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    height: auto;
+}
+
+.table-pagination .page-info {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Ações de tabela */
+.table-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.table-actions .btn {
+    padding: var(--spacing-xs);
+    height: auto;
+    width: auto;
+}
+
+/* Tabela vazia */
+.table-empty {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--color-text-muted);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .table th,
+    .table td {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-sm);
+    }
+    
+    .table-pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,142 @@
+/* 
+ * Sistema de Gestão LME - Estilos de Modais
+ * Data: 11/04/2025
+ * 
+ * Este arquivo contém os estilos para todos os modais do sistema.
+ */
+
+/* Modal base */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-index-modal);
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--color-background);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: var(--modal-width);
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    margin: auto;
+    border: var(--border-light);
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: var(--border-light);
+    background: linear-gradient(to right, var(--color-background-light), var(--color-background));
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: var(--font-size-lg);
+}
+
+.modal-body {
+    padding: var(--spacing-lg);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: var(--border-light);
+    background: linear-gradient(to right, var(--color-background), var(--color-background-light));
+}
+
+/* Tamanhos de modal */
+.modal-sm .modal-content {
+    max-width: 400px;
+}
+
+.modal-lg .modal-content {
+    max-width: 900px;
+}
+
+.modal-xl .modal-content {
+    max-width: 1200px;
+}
+
+.modal-fullscreen .modal-content {
+    max-width: 100%;
+    height: 100%;
+    border-radius: 0;
+}
+
+/* Estilos para a barra de rolagem do modal */
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: var(--transparency-light);
+    border-radius: var(--radius-md);
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--color-primary-light);
+    border-radius: var(--radius-md);
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-medium);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 100%;
+    }
+    
+    .modal-header {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    .modal-body {
+        padding: var(--spacing-md);
+    }
+    
+    .modal-footer {
+        padding: var(--spacing-sm) var(--spacing-md);
+        flex-wrap: wrap;
+    }
+    
+    .modal-footer .btn {
+        flex: 1;
+    }
+}

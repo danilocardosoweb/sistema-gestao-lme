@@ -1,0 +1,170 @@
+/* 
+ * Sistema de Gestão LME - Estilos Responsivos
+ * Data: 11/04/2025
+ * 
+ * Este arquivo contém as media queries e ajustes responsivos globais.
+ */
+
+/* Breakpoints
+ * --breakpoint-xs: 576px
+ * --breakpoint-sm: 768px
+ * --breakpoint-md: 992px
+ * --breakpoint-lg: 1200px
+ */
+
+/* Dispositivos extra pequenos (telefones em modo retrato, menos de 576px) */
+@media (max-width: 575.98px) {
+    .container {
+        padding: var(--spacing-sm);
+    }
+    
+    h1 {
+        font-size: 1.75rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .d-xs-none {
+        display: none !important;
+    }
+    
+    .d-xs-block {
+        display: block !important;
+    }
+    
+    .d-xs-flex {
+        display: flex !important;
+    }
+}
+
+/* Dispositivos pequenos (telefones em modo paisagem, menos de 768px) */
+@media (max-width: 767.98px) {
+    .d-sm-none {
+        display: none !important;
+    }
+    
+    .d-sm-block {
+        display: block !important;
+    }
+    
+    .d-sm-flex {
+        display: flex !important;
+    }
+    
+    .text-sm-center {
+        text-align: center !important;
+    }
+    
+    .flex-sm-column {
+        flex-direction: column !important;
+    }
+}
+
+/* Dispositivos médios (tablets, menos de 992px) */
+@media (max-width: 991.98px) {
+    .d-md-none {
+        display: none !important;
+    }
+    
+    .d-md-block {
+        display: block !important;
+    }
+    
+    .d-md-flex {
+        display: flex !important;
+    }
+    
+    .text-md-center {
+        text-align: center !important;
+    }
+}
+
+/* Dispositivos grandes (desktops, menos de 1200px) */
+@media (max-width: 1199.98px) {
+    .d-lg-none {
+        display: none !important;
+    }
+    
+    .d-lg-block {
+        display: block !important;
+    }
+    
+    .d-lg-flex {
+        display: flex !important;
+    }
+}
+
+/* Dispositivos extra grandes (desktops grandes) */
+@media (min-width: 1200px) {
+    .d-xl-none {
+        display: none !important;
+    }
+    
+    .d-xl-block {
+        display: block !important;
+    }
+    
+    .d-xl-flex {
+        display: flex !important;
+    }
+}
+
+/* Orientação do dispositivo */
+@media (orientation: portrait) {
+    .d-portrait-none {
+        display: none !important;
+    }
+    
+    .d-portrait-block {
+        display: block !important;
+    }
+    
+    .d-portrait-flex {
+        display: flex !important;
+    }
+}
+
+@media (orientation: landscape) {
+    .d-landscape-none {
+        display: none !important;
+    }
+    
+    .d-landscape-block {
+        display: block !important;
+    }
+    
+    .d-landscape-flex {
+        display: flex !important;
+    }
+}
+
+/* Impressão */
+@media print {
+    .d-print-none {
+        display: none !important;
+    }
+    
+    .d-print-block {
+        display: block !important;
+    }
+    
+    .d-print-flex {
+        display: flex !important;
+    }
+    
+    body {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+    
+    a {
+        text-decoration: underline;
+    }
+    
+    .container {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}

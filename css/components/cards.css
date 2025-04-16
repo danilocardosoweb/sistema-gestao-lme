@@ -1,0 +1,193 @@
+/* 
+ * Sistema de Gestão LME - Estilos de Cards e Painéis
+ * Data: 11/04/2025
+ * 
+ * Este arquivo contém os estilos para cards, painéis e containers de conteúdo.
+ */
+
+/* Card base */
+.card {
+    background: var(--gradient-card);
+    backdrop-filter: blur(10px);
+    border: var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Cabeçalho do card */
+.card-header {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: var(--border-light);
+    background: linear-gradient(to right, var(--color-background-light), var(--color-background));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3, 
+.card-header h4 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Corpo do card */
+.card-body {
+    padding: var(--spacing-lg);
+}
+
+/* Rodapé do card */
+.card-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: var(--border-light);
+    background: linear-gradient(to right, var(--color-background), var(--color-background-light));
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/* Variações de cards */
+.card-primary {
+    border-color: var(--color-primary);
+}
+
+.card-primary .card-header {
+    background: linear-gradient(to right, var(--color-primary-dark), var(--color-primary));
+    color: var(--color-text);
+}
+
+.card-primary .card-header h3,
+.card-primary .card-header h4 {
+    color: var(--color-text);
+}
+
+/* Card com imagem */
+.card-img-top {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card-img-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: var(--spacing-lg);
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Grupo de cards */
+.card-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.card-group .card {
+    flex: 1 0 300px;
+}
+
+/* Card de estatísticas */
+.stat-card {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-card .stat-value {
+    font-size: var(--font-size-xxl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-card .stat-label {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.stat-card .stat-icon {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+    opacity: 0.8;
+}
+
+/* Painel */
+.panel {
+    background: var(--transparency-light);
+    border: var(--border-light);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.panel-header {
+    padding: var(--spacing-md);
+    border-bottom: var(--border-light);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary);
+}
+
+.panel-body {
+    padding: var(--spacing-md);
+}
+
+.panel-footer {
+    padding: var(--spacing-md);
+    border-top: var(--border-light);
+    background: var(--transparency-light);
+}
+
+/* Seção de produtos */
+.products-section {
+    background: var(--gradient-card);
+    backdrop-filter: blur(10px);
+    border: var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-xl) 0;
+    box-shadow: var(--shadow-md);
+}
+
+.products-section h3 {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .card-header,
+    .card-body,
+    .card-footer {
+        padding: var(--spacing-md);
+    }
+    
+    .card-group {
+        flex-direction: column;
+    }
+    
+    .card-group .card {
+        width: 100%;
+    }
+    
+    .stat-card .stat-value {
+        font-size: var(--font-size-xl);
+    }
+}

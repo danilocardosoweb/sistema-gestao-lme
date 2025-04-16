@@ -1,0 +1,79 @@
+/* 
+ * Sistema de Gestão LME - Estilos da Navbar
+ * Data: 11/04/2025
+ * 
+ * Este arquivo contém os estilos específicos para a barra de navegação do sistema.
+ */
+
+.navbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--color-background-dark) 0%, var(--color-primary-dark) 100%);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    overflow-x: auto;
+    white-space: nowrap;
+    align-items: center;
+}
+
+.company-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin-right: 20px;
+}
+
+.navbar a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-normal);
+    font-weight: var(--font-weight-medium);
+}
+
+.navbar a:hover {
+    color: var(--color-text);
+    background-color: var(--transparency-light);
+}
+
+.navbar a.active {
+    color: var(--color-text);
+    background-color: var(--transparency-medium);
+    position: relative;
+}
+
+.navbar a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--color-primary);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px;
+        gap: 5px;
+        justify-content: flex-start;
+    }
+    
+    .company-logo {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    
+    .navbar a {
+        padding: 8px 12px;
+        font-size: var(--font-size-sm);
+    }
+}

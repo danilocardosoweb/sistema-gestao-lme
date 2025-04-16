@@ -1,0 +1,679 @@
+/* 
+ * Sistema de Gestão LME - Estilos da Página de Solicitação de Compras
+ * Data: 11/04/2025
+ */
+
+/* Estilos para o formulário de solicitação de compras */
+.form-section {
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 1rem 0;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1);
+}
+
+.form-section h2 {
+    color: var(--color-text);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    color: var(--color-text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
+}
+
+.form-group input[readonly] {
+    background: rgba(255,255,255,0.02);
+    border-color: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.7);
+    cursor: not-allowed;
+}
+
+.form-group input[type="date"] {
+    color-scheme: dark;
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+/* Melhorias visuais adicionais */
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    background: rgba(30, 40, 60, 0.8);
+    color: var(--color-text);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+}
+
+.form-group select option {
+    background-color: #1e3a59;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.form-group input:not([readonly]):hover,
+.form-group select:hover {
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* Estilos para a seção de produtos */
+.products-section {
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.total-info {
+    display: flex;
+    gap: 2rem;
+    color: var(--color-text);
+}
+
+.total-info span {
+    font-size: 0.9rem;
+}
+
+.total-info strong {
+    color: var(--color-primary);
+}
+
+.section-footer {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(74, 144, 226, 0.2);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Estilos para a seção de solicitações pendentes */
+.pending-requests-section {
+    background: linear-gradient(135deg, #1f3b5a 0%, #366ea2 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(74, 144, 226, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 4px 6px rgba(12, 35, 62, 0.3);
+}
+
+.pending-requests-section h2 {
+    color: var(--color-text);
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-pendente {
+    background-color: #ffc107;
+    color: #000000;
+}
+
+.status-aprovado {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+.status-recusado {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.status-revisao {
+    background-color: #17a2b8;
+    color: #ffffff;
+}
+
+/* Estilos para os botões de ação */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn-outline-primary,
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: normal;
+    white-space: nowrap;
+}
+
+.btn-outline-primary {
+    background: rgba(74, 144, 226, 0.1);
+    border: 1px solid rgba(74, 144, 226, 0.3);
+    color: var(--color-text);
+}
+
+.btn-outline-primary:hover {
+    background: rgba(74, 144, 226, 0.2);
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #357abd, #2868a5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.btn-outline-primary i,
+.btn-primary i {
+    font-size: 1.1rem;
+}
+
+.btn-danger {
+    background: rgba(220, 53, 69, 0.1);
+    border: none;
+    color: #dc3545;
+    padding: 0.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: rgba(220, 53, 69, 0.2);
+    transform: translateY(-1px);
+}
+
+.btn-danger i {
+    font-size: 1.1rem;
+}
+
+/* Estilos para o modal de calendário */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a3a5f 0%, #2c5a8c 100%);
+    border-radius: 15px;
+    width: 95%;
+    max-width: 800px;
+    max-height: 90vh;
+    margin: auto;
+    position: relative;
+    overflow: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(74, 144, 226, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(74, 144, 226, 0.3);
+    background: linear-gradient(135deg, #1f3b5a 0%, #366ea2 100%);
+    border-radius: 15px 15px 0 0;
+}
+
+.modal-header h2 {
+    color: var(--color-text);
+    font-size: 1.5rem;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: var(--color-text);
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-left: auto;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: rotate(90deg);
+    color: var(--color-primary);
+}
+
+.close-modal:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(20, 40, 70, 0.5);
+}
+
+/* Estilos para o formulário de revisão */
+.textarea-container {
+    position: relative;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem;
+    border: 1px solid rgba(74, 144, 226, 0.2);
+    transition: all 0.3s ease;
+}
+
+.textarea-container:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.textarea-container textarea {
+    width: 100%;
+    background: rgba(20, 40, 70, 0.5);
+    color: var(--color-text);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.textarea-container textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: rgba(20, 40, 70, 0.7);
+}
+
+.textarea-container textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+}
+
+.textarea-helper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.char-counter {
+    font-size: 0.8rem;
+}
+
+.char-counter.limit-reached {
+    color: #ff6b6b;
+    font-weight: 500;
+}
+
+.textarea-tips {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.textarea-tips i {
+    color: var(--color-primary);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.form-actions button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.form-actions button i {
+    font-size: 1.1rem;
+}
+
+.form-actions button:hover {
+    transform: translateY(-2px);
+}
+
+/* Tabela de itens da solicitação */
+.request-items table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    table-layout: auto;
+}
+
+.request-items th,
+.request-items td {
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.request-items th {
+    background: rgba(20, 40, 70, 0.8);
+    font-weight: 500;
+    color: var(--color-primary);
+    position: sticky;
+    top: 0;
+}
+
+.request-items tbody tr {
+    background: rgba(255, 255, 255, 0.05);
+    transition: background 0.2s ease;
+}
+
+.request-items tbody tr:hover {
+    background: rgba(74, 144, 226, 0.1);
+}
+
+/* Larguras específicas para as colunas */
+.request-items th:nth-child(1), 
+.request-items td:nth-child(1) {
+    width: 12%;
+}
+
+.request-items th:nth-child(2), 
+.request-items td:nth-child(2) {
+    width: 8%;
+}
+
+.request-items th:nth-child(3), 
+.request-items td:nth-child(3) {
+    width: auto;
+    min-width: 200px;
+}
+
+.request-items th:nth-child(4), 
+.request-items td:nth-child(4) {
+    width: 10%;
+}
+
+.request-items th:nth-child(5), 
+.request-items td:nth-child(5) {
+    width: 15%;
+    text-align: right;
+}
+
+.request-items th:nth-child(6), 
+.request-items td:nth-child(6) {
+    width: 12%;
+    text-align: center;
+}
+
+/* Botões padronizados */
+.request-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.request-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    min-width: 120px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.request-actions button i {
+    font-size: 1rem;
+}
+
+.request-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.request-actions button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos específicos para cada tipo de botão */
+.btn-success {
+    background: linear-gradient(to bottom, #2ecc71, #27ae60);
+    color: white;
+}
+
+.btn-warning {
+    background: linear-gradient(to bottom, #f39c12, #e67e22);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(to bottom, #e74c3c, #c0392b);
+    color: white;
+}
+
+.btn-outline-primary {
+    background: rgba(74, 144, 226, 0.1);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+.btn-outline-primary:hover {
+    background: rgba(74, 144, 226, 0.2);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .form-section {
+        padding: 1.5rem;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-outline-primary,
+    .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .request-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .request-actions button {
+        width: 100%;
+    }
+    
+    .request-items table {
+        font-size: 0.8rem;
+    }
+    
+    .request-items th,
+    .request-items td {
+        padding: 0.5rem 0.6rem;
+    }
+}
+
+/* Cabeçalho da tabela */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--color-primary);
+}
+
+.table-actions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.table-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.table-actions button i {
+    font-size: 0.95rem;
+}
+
+.table-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para linha de total */
+.total-row {
+    background: rgba(74, 144, 226, 0.1) !important;
+    font-weight: 500;
+}
+
+.total-row td {
+    border-top: 1px solid rgba(74, 144, 226, 0.3);
+}
+
+.text-right {
+    text-align: right;
+}

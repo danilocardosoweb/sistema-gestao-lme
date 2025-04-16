@@ -1,0 +1,240 @@
+/* 
+ * Sistema de Gestão LME - Estilos de Tabelas para Solicitação de Compras
+ * Data: 11/04/2025
+ */
+
+/* Estilos específicos para as tabelas da página de solicitação de compras */
+.table-container {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(74, 144, 226, 0.1);
+    width: 100%;
+    overflow-x: auto;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    max-height: none !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(74, 144, 226, 0.5) rgba(255, 255, 255, 0.1);
+}
+
+.table-container::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: rgba(74, 144, 226, 0.5);
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(74, 144, 226, 0.7);
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.table-container th {
+    background: rgba(74, 144, 226, 0.1);
+    color: var(--color-primary);
+    font-weight: 600;
+    padding: 1rem;
+    font-size: 0.95rem;
+    text-align: left;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.table-container td {
+    padding: 0.875rem 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(74, 144, 226, 0.1);
+}
+
+.table-container tr:hover {
+    background: rgba(74, 144, 226, 0.05);
+}
+
+/* Estilos para tabelas colapsáveis */
+.collapsible-table tbody tr {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.collapsible-table tbody tr:hover {
+    background-color: rgba(74, 144, 226, 0.1);
+}
+
+.collapsible-table .detail-row {
+    display: none;
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.collapsible-table .detail-row.visible {
+    display: table-row;
+}
+
+.collapsible-table .detail-content {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin: 10px;
+}
+
+.collapsible-table .detail-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.collapsible-table .detail-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 10px;
+    min-width: 200px;
+    flex: 1;
+}
+
+.collapsible-table .detail-item h4 {
+    margin: 0 0 8px 0;
+    color: var(--color-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.collapsible-table .detail-item p {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 0.9rem;
+}
+
+/* Estilos para o modal de detalhes */
+.modal-lg {
+    background: linear-gradient(135deg, #1a2a3d, #2c3e50);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.request-info {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.request-info p {
+    margin: 0;
+    min-width: 200px;
+    flex: 1;
+}
+
+.request-items {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+.request-items table {
+    min-width: 100%;
+    border-radius: 8px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.request-items th {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.request-items td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    white-space: normal;
+    word-break: break-word;
+}
+
+.request-items td:first-child,
+.request-items th:first-child {
+    padding-left: 20px;
+}
+
+.request-items td:last-child,
+.request-items th:last-child {
+    padding-right: 20px;
+}
+
+.request-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .table-container {
+        margin: 10px -15px;
+        padding: 0.5rem;
+    }
+    
+    .table-container th,
+    .table-container td {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .collapsible-table .detail-items {
+        flex-direction: column;
+    }
+    
+    .collapsible-table .detail-item {
+        min-width: 100%;
+    }
+    
+    .modal-lg {
+        width: 95%;
+        margin: 10px;
+        max-height: 85vh;
+    }
+
+    .request-info {
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .request-info p {
+        min-width: 100%;
+    }
+}
