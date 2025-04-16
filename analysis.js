@@ -1,5 +1,5 @@
 // Configuração da API
-const API_URL = 'http://localhost:3000/api/lme';
+const API_URL = '/api/lme';
 
 // Elementos do DOM
 const metalButtons = document.querySelectorAll('.metal-btn');
